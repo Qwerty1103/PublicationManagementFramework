@@ -1,5 +1,5 @@
 from os import name
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_wtf import FlaskForm
@@ -9,10 +9,12 @@ import mysql.connector
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SESSION_TYPE'] = 'sqlalchemy'
 
 app = Flask(__name__, static_folder="/static")
 
 db = SQLAlchemy(app)
+app.config['SESSION_SQLALCHEMY'] = db
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key = True) 
@@ -23,34 +25,31 @@ class Users(db.Model):
     doi = db.Column(db.String(200), )
     date = db.Column(db.DateTime, nullable = False)
     affiliation = db.Column(db.String(200), nullable = False) 
+    indexing = db.Column(db.String(200), nullable = False) 
 
     def _repr_(self):
         return '<Name %r>' %self.name
 
 @app.route('/')
+def login():
+    return render_template("login.html")
+
+@app.route('/home')
 def index():
     return render_template("index.html")
 
 
 @app.route('/submitted', methods=["GET","POST"])
 def sub():
-    res=[]
     id = request.form.get("id")
-    res.append(str(id))
     name = request.form.get("name")
-    res.append(str(name))
     type = request.form.get("type")
-    res.append(str(type))
     status = request.form.get("status")
-    res.append(str(status))
     title = request.form.get("title")
-    res.append(str(title))
     doi = request.form.get("doi")
-    res.append(str(doi))
     date = request.form.get("date")
-    res.append(str(date))
     affiliation = request.form.get("affiliation")
-    res.append(str(affiliation))
+    indexing = request.form.get("indexing")
     mydb = mysql.connector.connect( host="localhost", port="3306", user="root", password="QWERTY280921", database="prthmdb",auth_plugin="mysql_native_password")
     mycursor = mydb.cursor()
     mycursor.execute("select Emp_ID from employee")
@@ -62,8 +61,8 @@ def sub():
     if(flag==0):
         return render_template("error.html")
     else:
-        sql = "INSERT INTO publication (Emp_ID, Publisher_Name, Type, Status, Title, DOI, Pdate, Affiliation) VALUES ( %s,%s,%s,%s,%s,%s,%s,%s)"
-        val = (id,name,type,status,title,doi,date,affiliation)
+        sql = "INSERT INTO publication (Emp_ID, Publisher_Name, Type, Status, Title, DOI, Pdate, Affiliation, Indexing) VALUES ( %s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        val = (id,name,type,status,title,doi,date,affiliation,indexing)
         mycursor.execute(sql, val)
         mydb.commit()
         mycursor.execute("select * from publication")
