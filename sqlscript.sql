@@ -1,6 +1,7 @@
 DROP TABLE PUBLICATION;
 DROP TABLE EMPLOYEE;
 DROP TABLE CREDENTIALS;
+DROP TABLE TARGETS;
 
 CREATE TABLE EMPLOYEE 
 (
@@ -32,13 +33,22 @@ CREATE TABLE CREDENTIALS
     accesslevel integer
 );
 
+CREATE TABLE TARGETS
+(	
+	catname varchar(20),
+    scopustarget integer,
+    descript varchar(100)
+);
+
 select Emp_ID from employee;
 SELECT * FROM EMPLOYEE;
 SELECT * FROM PUBLICATION;
 SELECT * FROM CREDENTIALS;
+SELECT * FROM TARGETS;
 
 INSERT INTO employee VALUES ("21324","admin","Test","Testing");
 INSERT INTO employee VALUES ("223","efgh","c","d");
 INSERT INTO publication VALUES (123,"abcd","a","b","c","d",2002/04/05,"mitwpu");
 INSERT INTO publication VALUES (223,"efgh","c","d","e","f",2020/06/07,"mitwpu");
 INSERT INTO credentials VALUES ("abcd@mitwpu.edu.in","123456",1);
+INSERT INTO targets VALUES ("CAT2",2,"A faculty with PhD degree without PhD guideship as on April 10, 2021");
