@@ -30,7 +30,9 @@ CREATE TABLE CREDENTIALS
 (	
 	username varchar(50),
     password varchar(100),
-    accesslevel integer
+    accesslevel integer,
+    PRIMARY KEY (username),
+    UNIQUE (password)
 );
 
 CREATE TABLE TARGETS
