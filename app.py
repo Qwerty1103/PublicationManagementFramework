@@ -5,8 +5,6 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 import mysql.connector
 
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SESSION_TYPE'] = 'sqlalchemy'
@@ -15,6 +13,17 @@ app = Flask(__name__, static_folder="/static")
 
 db = SQLAlchemy(app)
 app.config['SESSION_SQLALCHEMY'] = db
+
+mydb = mysql.connector.connect( host="localhost", port="3306", user="root", password="QWERTY280921", database="prthmdb",auth_plugin="mysql_native_password")
+mycursor = mydb.cursor()
+
+class Info(db.Model):
+    username = db.Column(db.String(50), primary_key = True)
+    password = db.Column(db.String(100), nullable = False)
+
+@app.route('/')
+def login():
+    return render_template("login.html")
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key = True) 
@@ -30,14 +39,23 @@ class Users(db.Model):
     def _repr_(self):
         return '<Name %r>' %self.name
 
-@app.route('/')
-def login():
-    return render_template("login.html")
-
-@app.route('/home')
+@app.route('/home',methods = ["GET","POST"])
 def index():
-    return render_template("index.html")
-
+    username = request.form.get("username")
+    password = request.form.get("pass")
+    mycursor.execute("select username,password from credentials")
+    myres=mycursor.fetchall()
+    flag = 0
+    for row in myres:
+        print(row[1])
+        if(username == row[0]):
+            if(password == row[1]):
+                print("hello")
+                flag = 1
+    if(flag==0):
+        return("Username And Password Do Not Match With Our Database!")
+    else:
+        return render_template("index.html")
 
 @app.route('/submitted', methods=["GET","POST"])
 def sub():
@@ -50,8 +68,6 @@ def sub():
     date = request.form.get("date")
     affiliation = request.form.get("affiliation")
     indexing = request.form.get("indexing")
-    mydb = mysql.connector.connect( host="localhost", port="3306", user="root", password="QWERTY280921", database="prthmdb",auth_plugin="mysql_native_password")
-    mycursor = mydb.cursor()
     mycursor.execute("select Emp_ID from employee")
     myres=mycursor.fetchall()
     flag = 0
@@ -68,7 +84,7 @@ def sub():
         mycursor.execute("select * from publication")
         data=mycursor.fetchall()
         mydb.commit()
-        return render_template("tables_temp.html", data=data)
+        return render_template("display.html", data=data)
 
 if __name__ == '__main__':  
     app.run(debug=True)
