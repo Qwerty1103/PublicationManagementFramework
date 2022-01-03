@@ -1,9 +1,10 @@
 from os import name
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_wtf import FlaskForm
 import mysql.connector
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -16,6 +17,8 @@ app.config['SESSION_SQLALCHEMY'] = db
 
 mydb = mysql.connector.connect( host="localhost", port="3306", user="root", password="QWERTY280921", database="prthmdb",auth_plugin="mysql_native_password")
 mycursor = mydb.cursor()
+
+app.secret_key = os.urandom(24)
 
 class Info(db.Model):
     username = db.Column(db.String(50), primary_key = True)
@@ -55,7 +58,22 @@ def index():
     if(flag==0):
         return("Username And Password Do Not Match With Our Database!")
     else:
-        return render_template("index.html")
+        if request.method == 'POST':
+            session.pop('user',None)
+            session['user'] = username
+        else:
+            return render_template('login.html')
+        if g.user:
+            return render_template("index.html")
+        else:
+            return render_template('login.html')
+
+@app.before_request
+def init():
+    g.user = None
+
+    if 'user' in session:
+        g.user = session['user']
 
 @app.route('/submitted', methods=["GET","POST"])
 def sub():
