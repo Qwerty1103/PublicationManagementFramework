@@ -21,36 +21,36 @@
           </div>
         </div>
       </nav>
-      <form action="/submitted" method="POST">
+      <form id='form1' action="/submitted" method="POST">
           <div class="container">
         <div class="mb-3 my-3">
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Employee ID" name="id">
+          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Employee ID" name="id">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Name" name="name">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Name" name="name">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Type" name="type">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Type of Paper" name="type">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Status" name="status">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Status of Paper" name="status">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Title" name="title">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Title of Paper" name="title">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="DOI" name="doi">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter DOI of Paper" name="doi">
         </div>
         <div class="mb-3">
-          <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Date" name="date">
+          <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Enter Date of Publication" name="date">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Affiliation" name="affiliation">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Affiliation" name="affiliation">
         </div>
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Indexing" name="indexing">
+          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Indexing" name="indexing">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" onclick='check()' class="btn btn-primary">Submit</button>
       </form>
     </div>
 </body>

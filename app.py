@@ -50,10 +50,8 @@ def index():
     myres=mycursor.fetchall()
     flag = 0
     for row in myres:
-        print(row[1])
         if(username == row[0]):
             if(password == row[1]):
-                print("hello")
                 flag = 1
     if(flag==0):
         return("Username And Password Do Not Match With Our Database!")
